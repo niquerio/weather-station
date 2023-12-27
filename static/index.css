@@ -1,0 +1,51 @@
+body {
+  background: black;
+  color: white;
+  font-family: Raleway;
+}
+h2 {
+  text-align: center;
+  font-size: 48px;
+  font-weight: normal;
+  margin-top: 25px;
+  margin-bottom: 20px;
+}
+#now{
+  width: 280px;
+}
+p {
+  margin: 0;
+}
+.container {
+  display: flex;
+}
+.values {
+  font-family: Roboto Mono;
+  font-size: 50px
+}
+#clock{
+  text-align: center;
+  margin-top: 40px;
+}
+#clock-time{
+  font-size: 48px
+}
+#clock-date{
+  margin-top: 20px;
+  font-size: 40px
+}
+small{
+  font-size: 32px
+}
+.value-kind {
+  font-family: Roboto Mono;
+  font-size: 32px
+}
+.pair {
+  display: flex;
+  justify-content: space-between;
+}
+.col {
+  margin-left: auto;
+  margin-right: auto;
+}

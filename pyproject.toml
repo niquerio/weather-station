@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "weather-station"
+version = "0.1.0"
+description = ""
+authors = ["Monique Rio <nique.rio@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flask = "^3.0.0"
+flask-socketio = "^5.3.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
