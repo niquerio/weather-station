@@ -15,6 +15,7 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 Background Thread
 """
 
+
 def background_thread():
     while True:
         sensor_readings = {

@@ -9,6 +9,12 @@ function updateSensorReadings(jsonResponse) {
   updateGauge(temperature);
 }
 
+function setDateTime(){
+  date = new Date().toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"});
+  document.getElementById("clock-date").innerHTML = date;
+  time = new Date().toLocaleTimeString('en-us', {hour: "numeric", minute: "numeric"});
+  document.getElementById("clock-time").innerHTML = time;
+}
 /*
   SocketIO Code
 */
@@ -20,3 +26,5 @@ socket.on("updateSensorData", function (msg) {
   var sensorReadings = JSON.parse(msg);
   updateSensorReadings(sensorReadings);
 });
+
+setInterval(setDateTime,1000)
