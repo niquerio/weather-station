@@ -180,6 +180,7 @@ async function setForecast(){
     new_div.appendChild(temp_span);
     new_div.appendChild(hour_span);
    
+    hours.innerHtml = ""
     hours.appendChild(new_div);
 
   })
@@ -207,4 +208,4 @@ setDateTime();
 setInterval(setDateTime,1000)
 
 setForecast();
-//setInterval(setForecast,(1000 * 60 * 60))
+setInterval(setForecast,(1000 * 60 * 60))
