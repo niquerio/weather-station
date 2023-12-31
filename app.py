@@ -1,4 +1,5 @@
 import json
+from lib.forecast import Forecast
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 from random import random
@@ -26,9 +27,13 @@ def background_thread():
         socketio.emit("updateSensorData", sensor_json)
         socketio.sleep(3)
 
-@app.route("/hello")
+@app.route("/")
 def index():
     return render_template("index.html")
+
+@app.route("/forecast")
+def forecast():
+    return Forecast.fetch().output()
 
 """
 Decorator for connect

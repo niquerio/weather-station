@@ -30,31 +30,36 @@ class TestForecast(unittest.TestCase):
         self.assertEqual(nfh[0], {
              "temperature": 6.81, 
              "weather_code": 4200,
-             "time": "2 PM",
+             "hour": 14,
+             "time": "2PM",
              "timestamp": "2023-12-28T19:00:00Z"
          })
         self.assertEqual(nfh[1], {
              "temperature": 6.25,
              "weather_code": 4200,
-             "time": "5 PM",
+             "hour": 17,
+             "time": "5PM",
              "timestamp": "2023-12-28T22:00:00Z"
         })
         self.assertEqual(nfh[2], {
              "temperature": 5.78,
              "weather_code": 4000,
-             "time": "8 PM",  #01
+             "hour": 20,
+             "time": "8PM",  #01
              "timestamp": "2023-12-29T01:00:00Z"
         })
         self.assertEqual(nfh[3], {
              "temperature": 5.36,
              "weather_code": 1001,
-             "time": "11 PM",
+             "hour": 23,
+             "time": "11PM",
              "timestamp": "2023-12-29T04:00:00Z"
         })
         self.assertEqual(nfh[4], {
              "temperature": 4.71, 
              "weather_code": 1001,
-             "time": "2 AM",
+             "hour": 2,
+             "time": "2AM",
              "timestamp": "2023-12-29T07:00:00Z"
         })
 
@@ -65,43 +70,46 @@ class TestForecast(unittest.TestCase):
                 "low": 4.12,
                 "humidity": 91.6,
                 "precipitation": 47,
+                "weather_code": 1001
                 },
             "next_five_hours":[
                 {
                     "temperature": 6.81, 
                     "weather_code": 4200,
-                    "time": "2 PM",
+                    "hour": 14,
+                    "time": "2PM",
                     "timestamp": "2023-12-28T19:00:00Z"
                     },
                 {
                     "temperature": 6.25,
                     "weather_code": 4200,
-                    "time": "5 PM",
+                    "hour": 17,
+                    "time": "5PM",
                     "timestamp": "2023-12-28T22:00:00Z"
                     },
                 {
                     "temperature": 5.78,
                     "weather_code": 4000,
-                    "time": "8 PM",  #01
+                    "hour": 20,
+                    "time": "8PM",  #01
                     "timestamp": "2023-12-29T01:00:00Z"
                     },
                 {
                     "temperature": 5.36,
                     "weather_code": 1001,
-                    "time": "11 PM",
+                    "hour": 23,
+                    "time": "11PM",
                     "timestamp": "2023-12-29T04:00:00Z"
                     },
                 {
                     "temperature": 4.71, 
                     "weather_code": 1001,
-                    "time": "2 AM",
+                    "hour": 2,
+                    "time": "2AM",
                     "timestamp": "2023-12-29T07:00:00Z"
                     }
                 ]
             })
-
-    def test_toJSON(self):
-       self.assertEqual(self.forecast.toJSON().__class__.__name__, "str") 
 
 
 if __name__ == '__main__':

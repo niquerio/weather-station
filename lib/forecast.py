@@ -1,6 +1,12 @@
 from dateutil import parser, tz
-import json
+from requests import get
+import os
+
 class Forecast():
+    def fetch(apikey=os.getenv("TOMORROW_API_KEY")):
+        resp = get("https://api.tomorrow.io/v4/weather/forecast?location=42.295,-83.740", params={"apikey":apikey})
+        return Forecast(resp.json())
+
     to_zone = tz.gettz("America/New_York")
     def __init__(self,data):
         self._data = data
@@ -27,9 +33,7 @@ class Forecast():
                     lambda x: x["hour"] in [2,5,8,11,14,17,20,23], 
                     map(self.__hourly_map_fn, hourly)
                     )
-        wanted_keys = ["timestamp","weather_code","time","temperature"]
-        sfl = map(lambda d: dict((k, d[k]) for k in wanted_keys if k in d), ffl)
-        output = list(sfl)[0:5]
+        output = list(ffl)[0:5]
         return output
     
     def output(self):
@@ -39,18 +43,16 @@ class Forecast():
                 "low": self.today_low(),
                 "humidity": self.today_humidity(),
                 "precipitation": self.today_precipitation(),
+                "weather_code": self.today_weather_code()
                 },
             "next_five_hours": self.next_five_hours()
         }
-
-    def toJSON(self):
-        return json.dumps(self.output())
 
     def __hourly_map_fn(self,x):
        t = parser.parse(x["time"]).astimezone(self.to_zone)
        return {
                "timestamp": x["time"],
-               "time": t.strftime("%-I %p"),
+               "time": t.strftime("%-I%p"),
                "hour": int(t.strftime("%H")),
                "weather_code": int(x["values"]["weatherCode"]),
                "temperature": x["values"]["temperature"]
