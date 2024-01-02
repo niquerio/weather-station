@@ -1,5 +1,6 @@
 import json
 from lib.forecast import Forecast
+from lib.sensors import Sensors
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 from random import random
@@ -19,10 +20,7 @@ Background Thread
 
 def background_thread():
     while True:
-        sensor_readings = {
-            "temperature": random()*100,
-            "humidity": random()*100 
-         }
+        sensor_readings = Sensors.fetch().output()
         sensor_json = json.dumps(sensor_readings)
         socketio.emit("updateSensorData", sensor_json)
         socketio.sleep(3)

@@ -126,14 +126,11 @@ function weatherIcon(code,hour){
   return weatherCodeMap[code][time_of_day];
 }
 
-function updateGauge(temperature){
-  document.getElementById("outside-temperature").innerHTML = temperature + "°"
-
-};
-
 function updateSensorReadings(jsonResponse) {
-  let temperature = jsonResponse.temperature.toFixed(0);
-  updateGauge(temperature);
+  let inside_temperature = jsonResponse.inside.temperature.toFixed(0);
+  let inside_humidity = jsonResponse.inside.humidity.toFixed(0);
+  document.getElementById("inside-temperature").innerHTML = to_far(inside_temperature) + "°"
+  document.getElementById("inside-humidity").innerHTML = inside_humidity + "%"
 }
 
 function to_far(celcius){
