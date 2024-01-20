@@ -121,7 +121,8 @@ export const weatherCodeMap = {
   }
 }
 
+//TODO: Make this a function of sunrise and sunset
 export function weatherIcon(code,hour){
-  const time_of_day = hour >= 5 && hour <= 14 ? "day" : "night";
+  const time_of_day = hour >= 6 && hour <= 18 ? "day" : "night";
   return weatherCodeMap[code][time_of_day];
 }
