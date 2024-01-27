@@ -3,14 +3,13 @@ from lib.forecast import Forecast
 from lib.sensors import Sensors
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
-from random import random
 from threading import Lock
 
 thread = None
 thread_lock = Lock()
 
 app = Flask(__name__)
-app.secret_key = b'whatever'
+app.config.from_prefixed_env()
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 """
