@@ -9,10 +9,15 @@ class Sensors():
 
     def output(self):
         inside = next(x for x in self._data if x["name"] == "Music room")
+        outside = next(x for x in self._data if x["name"] == "Front porch")
         return {
                 "inside": {
                     "temperature": inside["temperature"],
                     "humidity": inside["humidity"],
+                    },
+                "outside": {
+                    "temperature": outside["temperature"],
+                    "humidity": outside["humidity"],
                     }
           
                 }

@@ -15,6 +15,10 @@ class TestForecast(unittest.TestCase):
             "inside": {
                 "temperature": 19.9,
                 "humidity": 45
+                },
+            "outside": {
+                "temperature": 19.9,
+                "humidity": 45
                 }
             })
 
