@@ -4,7 +4,7 @@ class Sensors():
         self._data=data
 
     def fetch():
-        resp = get("localhost:8888/api/sensors", params={"format": "brief"})
+        resp = get("http://localhost:8888/api/sensors", params={"format": "brief"})
         return Sensors(resp.json())
 
     def output(self):
