@@ -22,3 +22,17 @@ jobs:
       - run: poetry install
       - name: run tests
         run: poetry run python -m unittest
+
+
+  test-js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm ci
+      - name: run tests
+        run: npm run test-ci

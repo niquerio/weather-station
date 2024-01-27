@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --reporter=nyan js-test",
+    "test-ci": "mocha --reporter=dot js-test",
     "build": "esbuild js/index.js --bundle --minify --sourcemap --outfile=static/bundle.js",
     "watch": "esbuild js/index.js --bundle --sourcemap --outfile=static/bundle.js --watch"
   },
