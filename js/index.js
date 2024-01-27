@@ -1,10 +1,15 @@
 import { weatherIcon } from "./tomorrow_io.js"
 
 function updateSensorReadings(jsonResponse) {
-  let inside_temperature = jsonResponse.inside.temperature.toFixed(0);
-  let inside_humidity = jsonResponse.inside.humidity.toFixed(0);
+  const inside_temperature = jsonResponse.inside.temperature.toFixed(0);
+  const inside_humidity = jsonResponse.inside.humidity.toFixed(0);
+  const outside_temperature = jsonResponse.outside.temperature.toFixed(0);
+  const outside_humidity = jsonResponse.outside.humidity.toFixed(0);
+
   document.getElementById("inside-temperature").innerHTML = to_far(inside_temperature) + "°"
   document.getElementById("inside-humidity").innerHTML = inside_humidity + "%"
+  document.getElementById("outside-temperature").innerHTML = to_far(outside_temperature) + "°"
+  document.getElementById("outside-humidity").innerHTML = outside_humidity + "%"
 }
 
 function to_far(celcius){
