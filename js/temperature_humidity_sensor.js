@@ -47,7 +47,7 @@ export class EmptyLocation {
 }
 
 export async function get_sensor_data() {
-    const response = await fetch("http://localhost:8888/api/sensors")
+    const response = await fetch("/sensors")
     let sensor_data = response.json();
     return new TemperatureHumiditySensor(sensor_data)
 }

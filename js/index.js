@@ -14,7 +14,7 @@ import { get_sensor_data } from "./temperature_humidity_sensor"
 //}
 
 async function setSensorReadings() {
-  sensor_data = get_sensor_data();
+  sensor_data = await get_sensor_data();
   const inside_temperature = sensor_data.inside.temperature.toFixed(0);
   const inside_humidity = sensor_data.inside.humidity.toFixed(0);
   const outside_temperature = sensor_data.outside.temperature.toFixed(0);
@@ -98,7 +98,7 @@ setDateTime();
 setInterval(setDateTime, 1000)
 
 setSensorReadings();
-setInterval(setDateTime, (1000 * 15));
+setInterval(setSensorReadings, (1000 * 15));
 
 setForecast();
 setInterval(setForecast, (1000 * 60 * 60))
