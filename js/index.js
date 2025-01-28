@@ -27,7 +27,7 @@ async function setSensorReadings() {
 }
 
 function to_far(celcius) {
-  return ((celcius * 9 / 5) + 32)
+  return ((celcius * 9 / 5) + 32).toFixed(0);
 }
 
 function far_forecast(forecast) {
