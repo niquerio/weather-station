@@ -1,45 +1,33 @@
 import { weatherIcon } from "./tomorrow_io.js"
 import { get_sensor_data } from "./temperature_humidity_sensor"
 
-//function updateSensorReadings(jsonResponse) {
-//const inside_temperature = jsonResponse.inside.temperature.toFixed(0);
-//const inside_humidity = jsonResponse.inside.humidity.toFixed(0);
-//const outside_temperature = jsonResponse.outside.temperature.toFixed(0);
-//const outside_humidity = jsonResponse.outside.humidity.toFixed(0);
-
-//document.getElementById("inside-temperature").innerHTML = to_far(inside_temperature) + "°"
-//document.getElementById("inside-humidity").innerHTML = inside_humidity + "%"
-//document.getElementById("outside-temperature").innerHTML = to_far(outside_temperature) + "°"
-//document.getElementById("outside-humidity").innerHTML = outside_humidity + "%"
-//}
-
 async function setSensorReadings() {
-  sensor_data = await get_sensor_data();
-  const inside_temperature = sensor_data.inside.temperature.toFixed(0);
-  const inside_humidity = sensor_data.inside.humidity.toFixed(0);
-  const outside_temperature = sensor_data.outside.temperature.toFixed(0);
-  const outside_humidity = sensor_data.outside.humidity.toFixed(0);
+  const sensor_data = await get_sensor_data();
+  const inside_temperature = (sensor_data.inside.temperature / 10)
+  const inside_humidity = sensor_data.inside.humidity.toFixed(0)
+  const outside_temperature = (sensor_data.outside.temperature / 10)
+  const outside_humidity = sensor_data.outside.humidity.toFixed(0)
 
-  document.getElementById("inside-temperature").innerHTML = to_far(inside_temperature) + "°"
+  document.getElementById("inside-temperature").innerHTML = to_fahrenheit(inside_temperature) + "°"
   document.getElementById("inside-humidity").innerHTML = inside_humidity + "%"
-  document.getElementById("outside-temperature").innerHTML = to_far(outside_temperature) + "°"
+  document.getElementById("outside-temperature").innerHTML = to_fahrenheit(outside_temperature) + "°"
   document.getElementById("outside-humidity").innerHTML = outside_humidity + "%"
 }
 
-function to_far(celcius) {
+function to_fahrenheit(celcius) {
   return ((celcius * 9 / 5) + 32).toFixed(0);
 }
 
-function far_forecast(forecast) {
-  forecast.today.high = to_far(forecast.today.high)
-  forecast.today.low = to_far(forecast.today.low)
+function fahrenheit_forecast(forecast) {
+  forecast.today.high = to_fahrenheit(forecast.today.high)
+  forecast.today.low = to_fahrenheit(forecast.today.low)
 }
 
 async function setForecast() {
   const response = await fetch("/forecast");
   let forecast = await response.json();
   const hour = new Date().toLocaleTimeString("en-US", { hour12: false, hour: "numeric" });
-  far_forecast(forecast);
+  fahrenheit_forecast(forecast);
   const icon_text = weatherIcon(forecast.today.weather_code, parseInt(hour));
   document.getElementById("today-icon").innerHTML = icon_text;
   ["high", "low", "humidity", "precipitation"].forEach((kind) => {
@@ -59,7 +47,7 @@ async function setForecast() {
 
 
     const icon_text = document.createTextNode(weatherIcon(t.weather_code, t.hour));
-    const temp_text = document.createTextNode(to_far(t.temperature).toFixed(0) + "°");
+    const temp_text = document.createTextNode(to_fahrenheit(t.temperature).toFixed(0) + "°");
     const hour_text = document.createTextNode(t.time);
 
     icon_span.appendChild(icon_text);
@@ -82,17 +70,6 @@ function setDateTime() {
   var time = new Date().toLocaleTimeString('en-US', { hour: "numeric", minute: "numeric" });
   document.getElementById("clock-time").innerHTML = time;
 }
-/*
-  SocketIO Code
-*/
-//   var socket = io.connect("http://" + document.domain + ":" + location.port);
-//var socket = io.connect();
-//
-////receive details from server
-//socket.on("updateSensorData", function (msg) {
-//  var sensorReadings = JSON.parse(msg);
-//  updateSensorReadings(sensorReadings);
-//});
 
 setDateTime();
 setInterval(setDateTime, 1000)
