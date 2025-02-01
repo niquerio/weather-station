@@ -47,7 +47,7 @@ async function setForecast() {
 
 
     const icon_text = document.createTextNode(weatherIcon(t.weather_code, t.hour));
-    const temp_text = document.createTextNode(to_fahrenheit(t.temperature).toFixed(0) + "°");
+    const temp_text = document.createTextNode(to_fahrenheit(t.temperature) + "°");
     const hour_text = document.createTextNode(t.time);
 
     icon_span.appendChild(icon_text);
