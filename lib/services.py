@@ -9,6 +9,8 @@ class Services:
 
 
 S = Services(
-    sensor_api_url=os.getenv("SENSOR_API_URL", "http://galilei:8888/api/sensors"),
+    sensor_api_url=os.getenv(
+        "SENSOR_API_URL", "http://your_sensor_api_url/api/sensors"
+    ),
     tomorrow_api_key=os.getenv("TOMORROW_API_KEY", "your_api_key"),
 )
