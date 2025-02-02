@@ -34,6 +34,7 @@ async function setForecast() {
     document.getElementById(kind).innerHTML = parseFloat(forecast.today[kind]).toFixed(0);
   });
   const hours = document.getElementById("hours")
+  hours.innerHTML = "";
   forecast.next_five_hours.forEach((t) => {
     const new_div = document.createElement("div")
     new_div.classList.add("hour")
