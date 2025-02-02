@@ -1,54 +1,52 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Weather Station</title>
-    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
-    <link href='https://fonts.googleapis.com/css?family=Roboto Mono' rel='stylesheet'>
-    <link
-      href="{{url_for('static', filename = 'index.css')}}"
-      rel="stylesheet"
-    />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,100,1,200" rel="stylesheet" />
-    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-  </head>
-  <body>
-    <div class="container">
-      <div id="now" class="col">
-        <h2>Now</h2>
-        <div id="outside" class="values pair">
-          <span style="color: green; font-size:60px" class="material-symbols-outlined">park</span>
-          <span id="outside-temperature">00°</span>
-          <span id="outside-humidity">00%</span>
-        </div>
-        <div id="inside" class="values pair">
-          <span style="color: #98B7D4; font-size:60px" class="material-symbols-outlined">cottage</span>
-          <span id="inside-temperature">00°</span>
-          <span id="inside-humidity">00%</span>
-        </div>
-        <div id="clock">
-          <div id="clock-time">1:00</div>
-          <div id="clock-date">July 15, 2023</div>
-        </div>
+
+<head>
+  <title>Weather Station</title>
+  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto Mono' rel='stylesheet'>
+  <link href="{{url_for('static', filename = 'index.css')}}" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,100,1,200"
+    rel="stylesheet" />
+  <!--<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>-->
+</head>
+
+<body>
+  <div class="container">
+    <div id="now" class="col">
+      <h2>Now</h2>
+      <div id="outside" class="values pair">
+        <span style="color: green; font-size:60px" class="material-symbols-outlined">park</span>
+        <span id="outside-temperature">00°</span>
+        <span id="outside-humidity">00%</span>
       </div>
-      <div id="forecast" class="col">
-        <h2>Forecast</h2>
-        <div id="today" class="values">
-          <div id="today-temperature" class="pair">
-            <span style="color: gray; font-size:60px" class="material-symbols-outlined" id="today-icon">sunny</span>
-            <span><span id="high">00</span>°</span>
-            /
-            <span><span id="low">00</span>°</span>
-          </div>
-          <span id="humidity">00</span>%<small> H</small>
-          <span id="precipitation">00</span>%<small> P</small>
-        </div>
-        <div id="hours">
-        </div>
+      <div id="inside" class="values pair">
+        <span style="color: #98B7D4; font-size:60px" class="material-symbols-outlined">cottage</span>
+        <span id="inside-temperature">00°</span>
+        <span id="inside-humidity">00%</span>
+      </div>
+      <div id="clock">
+        <div id="clock-time">1:00</div>
+        <div id="clock-date">July 15, 2023</div>
       </div>
     </div>
-   <script
-      type="text/javascript"
-      src="{{ url_for('static', filename = 'bundle.js') }}"
-    ></script>
-  </body>
+    <div id="forecast" class="col">
+      <h2>Forecast</h2>
+      <div id="today" class="values">
+        <div id="today-temperature" class="pair">
+          <span style="color: gray; font-size:60px" class="material-symbols-outlined" id="today-icon">sunny</span>
+          <span><span id="high">00</span>°</span>
+          /
+          <span><span id="low">00</span>°</span>
+        </div>
+        <span id="humidity">00</span>%<small> H</small>
+        <span id="precipitation">00</span>%<small> P</small>
+      </div>
+      <div id="hours">
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="{{ url_for('static', filename = 'bundle.js') }}"></script>
+</body>
+
 </html>
