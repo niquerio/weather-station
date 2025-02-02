@@ -33,12 +33,11 @@ class Forecast:
 
     def next_five_hours(self):
         hourly = self._data["timelines"]["hourly"]
-
-        ffl = filter(
-            lambda x: x["hour"] in [2, 5, 8, 11, 14, 17, 20, 23],
-            map(self.__hourly_map_fn, hourly),
-        )
-        output = list(ffl)[0:5]
+        simpler_hourly = [self.__hourly_map_fn(hour) for hour in hourly]
+        hours_we_care_about = [
+            x for x in simpler_hourly if x["hour"] in [2, 5, 8, 11, 14, 17, 20, 23]
+        ]
+        output = hours_we_care_about[0:5]
         return output
 
     def output(self):

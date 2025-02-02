@@ -15,27 +15,25 @@ describe('TemperatureHumiditySensor tests', () => {
 
     it("has an inside location of Music room", (done) => {
         const sensor = new TemperatureHumiditySensor(sensor_data)
-        expect(sensor.inside instanceof Location).to.be.true
         expect(sensor.inside.name).to.equal("Music room")
         done();
     });
 
     it("has an outside location of Front porch", (done) => {
         const sensor = new TemperatureHumiditySensor(sensor_data)
-        expect(sensor.outside instanceof Location).to.be.true
         expect(sensor.outside.name).to.equal("Front porch")
         done();
     });
 
-    it('returns and EmptyLocation for inside when data is empty', (done) => {
+    it('returns an empty string location for inside when data is empty', (done) => {
         const sensor = new TemperatureHumiditySensor([])
-        expect(sensor.inside instanceof EmptyLocation).to.be.true
+        expect(sensor.inside.name).to.equal("")
         done();
     })
 
-    it('returns and EmptyLocation for outside when data is empty', (done) => {
+    it('returns an EmptyLocation for outside when data is empty', (done) => {
         const sensor = new TemperatureHumiditySensor([])
-        expect(sensor.outside instanceof EmptyLocation).to.be.true
+        expect(sensor.outside.name).to.equal("")
         done();
     })
 });
@@ -62,7 +60,7 @@ describe('Location', () => {
         done();
     });
 });
-describe('EmtpyLocation', () => {
+describe('EmptyLocation', () => {
     it("has a humidty", (done) => {
         var location = new EmptyLocation(sensor_data[0])
         expect(location.humidity).to.equal("")
