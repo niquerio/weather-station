@@ -26,9 +26,9 @@ RUN npm run build
 ################################################################################
 # BASE                                                                         #
 ################################################################################
-FROM python:3.11-slim-bookworm AS base
+FROM python:3.14-slim-trixie AS base
 
-ARG POETRY_VERSION=1.8.3
+ARG POETRY_VERSION=2.5.1
 ARG UID=1000
 ARG GID=1000
 
@@ -92,9 +92,6 @@ RUN poetry export --without dev -f requirements.txt --output requirements.txt
 # step.  This step is the place to install development-only sytem dependencies
 #
 FROM poetry AS development
-
-RUN apt-get update -yqq && apt-get install -yqq --no-install-recommends \
-  boxes
 
 USER app
 
