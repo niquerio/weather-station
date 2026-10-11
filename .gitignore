@@ -1,7 +1,9 @@
 .env
 .flaskenv
+.cache
 __pycache__
 .venv
 node_modules
 static/bundle.js
 static/bundle.js.map
+.bash_history
