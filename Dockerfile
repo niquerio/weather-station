@@ -82,6 +82,9 @@ FROM poetry AS build
 # README.md is needed so that poetry command will work.
 COPY pyproject.toml poetry.lock README.md ./
 
+# Need to be able to export poetry
+RUN poetry self add poetry-plugin-export
+
 RUN poetry export --without dev -f requirements.txt --output requirements.txt
 
 ################################################################################
@@ -115,3 +118,5 @@ COPY --chown=${UID}:{GID} --from=assets /app/static/bundle.js.map /app/static/bu
 RUN pip install -r /app/requirements.txt
 
 USER app
+
+CMD [ "uvicorn", "main:app", "--host", "0.0.0.0" ]
