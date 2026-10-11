@@ -1,6 +1,6 @@
 import unittest
 import json
-from lib.forecast import Forecast
+from app.forecast import Forecast
 from pathlib import Path
 
 THIS_DIR = Path(__file__).parent

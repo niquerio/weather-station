@@ -1,5 +1,5 @@
-from requests import get
-from lib.services import S
+from httpx import get
+from app.services import S
 
 
 class Sensors:

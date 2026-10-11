@@ -8,13 +8,14 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.10"
-flask = "^3.0.0"
-flask-socketio = "^5.3.6"
 python-dateutil = "^2.8.2"
-requests = "^2.31.0"
 python-dotenv = "^1.0.0"
-gunicorn = "^21.2.0"
-flask-caching = "^2.3.0"
+fastapi = "^0.143.0"
+uvicorn = "^0.54.0"
+jinja2 = "^3.1.6"
+fastapi-cache2 = "^0.2.2"
+httpx = "^0.28.1"
+fastapi-structured-logging = "^1.0.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.1.1"
