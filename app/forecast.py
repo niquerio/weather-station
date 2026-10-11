@@ -1,13 +1,14 @@
 from dateutil import parser, tz
-from requests import get
-from lib.services import S
+from httpx import get
+from app.services import S
 
 
 class Forecast:
     def fetch():
         resp = get(
-            "https://api.tomorrow.io/v4/weather/forecast?location=42.295,-83.740",
-            params={"apikey": S.tomorrow_api_key},
+            "https://api.tomorrow.io/v4/weather/forecast",
+            params={"location": "42.295,-83.740"},
+            headers={"apikey": S.tomorrow_api_key},
         )
         return Forecast(resp.json())
 

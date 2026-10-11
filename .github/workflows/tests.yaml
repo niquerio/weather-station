@@ -21,7 +21,7 @@ jobs:
           cache: 'poetry'
       - run: poetry install --no-root
       - name: run tests
-        run: poetry run python -m unittest
+        run: poetry run pytest
 
 
   test-js:
@@ -31,7 +31,7 @@ jobs:
       - name: Set up node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 26 
           cache: npm
       - run: npm ci
       - name: run tests
