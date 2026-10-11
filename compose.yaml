@@ -1,0 +1,48 @@
+services:
+  app:
+    build:
+      context: .
+      target: development
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+  web:
+    build:
+      context: .
+      target: development
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    ports:
+      - 8080:8080
+      #- 9100:9100
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    command:
+      - poetry 
+      - run
+      - gunicorn
+      - --config 
+      - wsgi.py
+      - app:app
+  js:
+    build:
+      context: .
+      target: assets
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    command:
+      - npm
+      - run
+      - watch
