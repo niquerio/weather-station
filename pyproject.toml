@@ -17,6 +17,7 @@ gunicorn = "^21.2.0"
 flask-caching = "^2.3.0"
 
 [tool.poetry.group.dev.dependencies]
+pytest = "^9.1.1"
 
 [build-system]
 requires = ["poetry-core"]

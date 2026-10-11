@@ -21,7 +21,7 @@ jobs:
           cache: 'poetry'
       - run: poetry install --no-root
       - name: run tests
-        run: poetry run python -m unittest
+        run: poetry run pytest
 
 
   test-js:
