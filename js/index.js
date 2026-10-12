@@ -7,23 +7,23 @@ async function setSensorReadings() {
   const sensor_data = await get_sensor_data();
   for(const sensor_location of ["inside", "outside"]){
     const temperature = sensor_data[sensor_location].temperature / 10
-    const humidity = sensor_data[sensor_location].humidity.toFixed(0)
-    const dewpoint = sensor_data[sensor_location].dewpoint.toFixed(0)
+    const humidity = sensor_data[sensor_location].humidity
+    const dewpoint = sensor_data[sensor_location].dewpoint
     const time = formatter.format(sensor_data[sensor_location].time)
-    document.getElementById(`${sensor_location}-temperature`).innerHTML = to_fahrenheit(temperature)
-    document.getElementById(`${sensor_location}-humidity`).innerHTML = humidity
-    document.getElementById(`${sensor_location}-dewpoint`).innerHTML = to_fahrenheit(dewpoint)
+    document.getElementById(`${sensor_location}-temperature`).innerHTML = to_fahrenheit_fixed(temperature)
+    document.getElementById(`${sensor_location}-humidity`).innerHTML = humidity.toFixed(0)
+    document.getElementById(`${sensor_location}-dewpoint`).innerHTML = to_fahrenheit_fixed(dewpoint)
     document.getElementById(`${sensor_location}-tip`).innerHTML = `Last update: ${time}`
   }
 }
 
-function to_fahrenheit(celsius) {
+function to_fahrenheit_fixed(celsius) {
   return ((celsius * 9 / 5) + 32).toFixed(0);
 }
 
 function fahrenheit_forecast(forecast) {
-  forecast.today.high = to_fahrenheit(forecast.today.high)
-  forecast.today.low = to_fahrenheit(forecast.today.low)
+  forecast.today.high = to_fahrenheit_fixed(forecast.today.high)
+  forecast.today.low = to_fahrenheit_fixed(forecast.today.low)
 }
 
 async function setForecast() {
@@ -63,7 +63,7 @@ async function setForecast() {
 
     const icon_text = document.createTextNode(weatherIcon(t.weather_code, t.hour));
     const tooltip_text = document.createTextNode(weather_text(t.weather_code))
-    const temp_text = document.createTextNode(to_fahrenheit(t.temperature) + "°");
+    const temp_text = document.createTextNode(to_fahrenheit_fixed(t.temperature) + "°");
     const hour_text = document.createTextNode(t.time);
 
     icon_span.appendChild(icon_text);

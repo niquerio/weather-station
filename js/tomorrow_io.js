@@ -5,7 +5,7 @@ export const weatherCodeMap = {
     night: "none"
   },
   "1000": {
-    name: "Clear, Sunny",
+    name: "Clear",
     day: "sunny",
     night: "clear_night"
   },
