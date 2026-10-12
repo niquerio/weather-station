@@ -1,0 +1,3 @@
+{% for metric in metrics %}{{ metric }}
+
+{% endfor %}

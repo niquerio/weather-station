@@ -34,6 +34,9 @@ export class Location {
     get temperature() {
         return this.data["temperature"]
     }
+    get dewpoint() {
+      return this.data["dewpoint"]
+    }
     get time() {
         return new Date(this.data["time"])
     }

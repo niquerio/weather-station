@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
@@ -14,6 +14,7 @@ import fastapi_structured_logging
 
 from app.forecast import Forecast
 from app.sensors import Sensors
+from app.metrics import all_metrics
 
 
 @asynccontextmanager
@@ -41,7 +42,7 @@ def main(request: Request):
 
 @app.get("/sensors")
 def sensors():
-    return Sensors.fetch()
+    return Sensors.fetch().serialize()
 
 
 @app.get("/forecast")
@@ -53,3 +54,14 @@ async def forecast():
     3 requests/second; 25 requests/hour; 500 requests/day.
     """
     return Forecast.fetch().output()
+
+
+@app.get("/metrics", response_class=PlainTextResponse)
+def metrics(request: Request):
+    sensors = Sensors.fetch()
+    return templates.TemplateResponse(
+        request=request,
+        name="metrics.txt",
+        context={"metrics": all_metrics(sensors)},
+        media_type="text/plain",
+    )

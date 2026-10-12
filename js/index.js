@@ -5,17 +5,21 @@ async function setSensorReadings() {
   const sensor_data = await get_sensor_data();
   const inside_temperature = (sensor_data.inside.temperature / 10)
   const inside_humidity = sensor_data.inside.humidity.toFixed(0)
+  const inside_dewpoint = sensor_data.inside.dewpoint.toFixed(0)
   const outside_temperature = (sensor_data.outside.temperature / 10)
   const outside_humidity = sensor_data.outside.humidity.toFixed(0)
+  const outside_dewpoint = sensor_data.outside.dewpoint.toFixed(0)
 
-  document.getElementById("inside-temperature").innerHTML = to_fahrenheit(inside_temperature) + "°"
-  document.getElementById("inside-humidity").innerHTML = inside_humidity + "%"
-  document.getElementById("outside-temperature").innerHTML = to_fahrenheit(outside_temperature) + "°"
-  document.getElementById("outside-humidity").innerHTML = outside_humidity + "%"
+  document.getElementById("inside-temperature").innerHTML = to_fahrenheit(inside_temperature)
+  document.getElementById("inside-humidity").innerHTML = inside_humidity
+  document.getElementById("inside-dewpoint").innerHTML = to_fahrenheit(inside_dewpoint)
+  document.getElementById("outside-temperature").innerHTML = to_fahrenheit(outside_temperature)
+  document.getElementById("outside-humidity").innerHTML = outside_humidity
+  document.getElementById("outside-dewpoint").innerHTML = to_fahrenheit(outside_dewpoint) 
 }
 
-function to_fahrenheit(celcius) {
-  return ((celcius * 9 / 5) + 32).toFixed(0);
+function to_fahrenheit(celsius) {
+  return ((celsius * 9 / 5) + 32).toFixed(0);
 }
 
 function fahrenheit_forecast(forecast) {
