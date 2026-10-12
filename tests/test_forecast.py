@@ -11,7 +11,9 @@ class TestForecast(unittest.TestCase):
         fixture_path = THIS_DIR / "fixtures/tomorrow_forecast.json"
         with open(fixture_path) as forecast_file:
             file_contents = json.load(forecast_file)
-        self.forecast = Forecast(file_contents)
+
+        date = "Mon, 12 Oct 2026 21:26:45 GMT"
+        self.forecast = Forecast(file_contents, date)
 
     def test_today_high(self):
         self.assertEqual(self.forecast.today_high(), 6.81)
@@ -129,6 +131,7 @@ class TestForecast(unittest.TestCase):
                         "timestamp": "2023-12-29T07:00:00Z",
                     },
                 ],
+                "date": "Mon, 12 Oct 2026 21:26:45 GMT",
             },
         )
 

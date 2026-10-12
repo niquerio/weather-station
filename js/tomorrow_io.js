@@ -5,7 +5,7 @@ export const weatherCodeMap = {
     night: "none"
   },
   "1000": {
-    name: "Clear, Sunny",
+    name: "Clear",
     day: "sunny",
     night: "clear_night"
   },
@@ -125,4 +125,8 @@ export const weatherCodeMap = {
 export function weatherIcon(code,hour){
   const time_of_day = hour >= 6 && hour <= 18 ? "day" : "night";
   return weatherCodeMap[code][time_of_day];
+}
+
+export function weather_text(code){
+  return weatherCodeMap[code]["name"]
 }
