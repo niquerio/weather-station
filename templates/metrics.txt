@@ -1,16 +1,3 @@
-# HELP temperature_celcius Temperature in celcius
-# TYPE temperature_celcius gauge
-{% for sensor in sensors %} temperature_celcius{{sensor.labels()}} {{ sensor.temperature_celcius }} 
-{% endfor %}
-# HELP humidity_ratio Humidity between 0 and 1
-# TYPE humidity_ratio gauge
-{% for sensor in sensors %} humidity_ratio{{sensor.labels()}} {{ sensor.humidity_ratio }} 
-{% endfor %}
-# HELP battery_ok Boolean state of sensor battery 
-# TYPE battery_ok gauge
-{% for sensor in sensors %} battery_ok{{sensor.labels()}} {{ sensor.battery_metric }} 
-{% endfor %}
-# HELP sensor_data_last_recorded_timestamp_seconds 
-# TYPE sensor_data_last_recorded_timestamp_seconds gauge
-{% for sensor in sensors %} sensor_data_last_recorded_timestamp_seconds{{sensor.labels()}}  {{ sensor.timestamp_seconds }} 
+{% for metric in metrics %}{{ metric }}
+
 {% endfor %}

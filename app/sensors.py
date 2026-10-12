@@ -1,25 +1,31 @@
 from httpx import get
 from app.services import S
-from dataclasses import dataclass
+from dataclasses import dataclass, field, asdict
 from datetime import datetime
+from metpy.calc import dewpoint_from_relative_humidity
+from metpy.units import units
+import json
 
 
 class Sensors:
     @classmethod
     def fetch(cls):
         resp = get(S.sensor_api_url)
-        return resp.json()
+        return Sensors(resp.json())
 
     @classmethod
     def get(cls):
-        data = Sensors.fetch()
-        return Sensors(data)
+        resp = get(S.sensor_api_url)
+        return Sensors(resp.json())
 
     def __init__(self, data):
         self.data = data
 
     def __iter__(self):
         return iter([Sensor(**item) for item in self.data])
+
+    def serialize(self):
+        return [asdict(sen) for sen in self]
 
 
 @dataclass
@@ -34,9 +40,22 @@ class Sensor:
     battery_ok: bool = False
     t_hist: int = 0
     h_hist: int = 0
+    dewpoint: float = field(init=False, repr=True)
 
     @property
-    def room_label(self):
+    def dewpoint(self):
+        return float(
+            dewpoint_from_relative_humidity(
+                self.temperature_celcius * units.degC, self.humidity * units.percent
+            ).magnitude
+        )
+
+    @dewpoint.setter
+    def dewpoint(self, _):
+        pass  # Do nothing, this is a read-only attribute
+
+    @property
+    def room_label(self) -> str:
         return self.name.lower().replace(" ", "_")
 
     @property
@@ -56,4 +75,4 @@ class Sensor:
         return int(self.battery_ok)
 
     def labels(self):
-        return "{" + f"room={self.room_label}, type={self.type}" + "}"
+        return f"room={self.room_label}, type={self.type}"

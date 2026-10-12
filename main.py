@@ -14,6 +14,7 @@ import fastapi_structured_logging
 
 from app.forecast import Forecast
 from app.sensors import Sensors
+from app.metrics import all_metrics
 
 
 @asynccontextmanager
@@ -41,7 +42,7 @@ def main(request: Request):
 
 @app.get("/sensors")
 def sensors():
-    return Sensors.fetch()
+    return Sensors.fetch().serialize()
 
 
 @app.get("/forecast")
@@ -57,9 +58,10 @@ async def forecast():
 
 @app.get("/metrics", response_class=PlainTextResponse)
 def metrics(request: Request):
+    sensors = Sensors.fetch()
     return templates.TemplateResponse(
         request=request,
         name="metrics.txt",
-        context={"sensors": Sensors.get()},
+        context={"metrics": all_metrics(sensors)},
         media_type="text/plain",
     )
