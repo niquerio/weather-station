@@ -10,12 +10,13 @@ class Forecast:
             params={"location": "42.295,-83.740"},
             headers={"apikey": S.tomorrow_api_key},
         )
-        return Forecast(resp.json())
+        return Forecast(resp.json(), resp.headers["date"])
 
     to_zone = tz.gettz("America/New_York")
 
-    def __init__(self, data):
+    def __init__(self, data, date=""):
         self._data = data
+        self.date = date
 
     def today_high(self):
         return self.__today("temperatureMax")
@@ -51,6 +52,7 @@ class Forecast:
                 "weather_code": self.today_weather_code(),
             },
             "next_five_hours": self.next_five_hours(),
+            "date": self.date,
         }
 
     def __hourly_map_fn(self, x):

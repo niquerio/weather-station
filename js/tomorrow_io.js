@@ -126,3 +126,7 @@ export function weatherIcon(code,hour){
   const time_of_day = hour >= 6 && hour <= 18 ? "day" : "night";
   return weatherCodeMap[code][time_of_day];
 }
+
+export function weather_text(code){
+  return weatherCodeMap[code]["name"]
+}
