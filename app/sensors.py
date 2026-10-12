@@ -46,7 +46,7 @@ class Sensor:
     def dewpoint(self):
         return float(
             dewpoint_from_relative_humidity(
-                self.temperature_celcius * units.degC, self.humidity * units.percent
+                self.temperature_celsius * units.degC, self.humidity * units.percent
             ).magnitude
         )
 
@@ -63,7 +63,7 @@ class Sensor:
         return self.humidity / 100
 
     @property
-    def temperature_celcius(self):
+    def temperature_celsius(self):
         return self.temperature / 10
 
     @property

@@ -11,7 +11,7 @@ h2 {
   margin-bottom: 20px;
 }
 #now{
-  width: 280px;
+  width: 400px;
 }
 #forecast{
   width: 320px;
@@ -21,9 +21,10 @@ p {
 }
 .container {
   display: flex;
+  align-self: flex-end;
 }
 .values {
-  font-family: Roboto Mono;
+  font-family: Roboto;
   font-size: 50px
 }
 #clock{
@@ -38,15 +39,20 @@ p {
   font-size: 40px
 }
 small{
-  font-size: 32px
+  font-size: 32px;
 }
 .value-kind {
-  font-family: Roboto Mono;
+  font-family: Roboto;
   font-size: 32px
 }
 .pair {
   display: flex;
-  justify-content: space-between;
+ justify-content: space-between
+}
+.measurement{
+  display:flex; 
+  justify-content: center; 
+  align-items: baseline
 }
 .col {
   margin-left: auto;
@@ -61,7 +67,7 @@ small{
 .hour {
   display: flex;
   flex-direction: column;
-  font-family: Roboto Mono;
+  font-family: Roboto;
   font-size: 20px;
 }
 .hour-icon{

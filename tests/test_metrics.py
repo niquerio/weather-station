@@ -41,15 +41,15 @@ def sensors(data):
 
 def test_metric_has_expected_output_string(sensors):
     metric = Metric(
-        name="temperature_celcius",
-        help_text="Temperature in celcius",
-        attribute="temperature_celcius",
+        name="temperature_celsius",
+        help_text="Temperature in celsius",
+        attribute="temperature_celsius",
         sensors=sensors,
     )
     expected = """
-    # HELP temperature_celcius Temperature in celcius
-    # TYPE temperature_celcius gauge
-    temperature_celcius{room=music_room, type=F007TH} 19.9
-    temperature_celcius{room=front_porch, type=F007TH} 39.9
+    # HELP temperature_celsius Temperature in celsius
+    # TYPE temperature_celsius gauge
+    temperature_celsius{room=music_room, type=F007TH} 19.9
+    temperature_celsius{room=front_porch, type=F007TH} 39.9
     """
     assert metric.__str__() == textwrap.dedent(expected).strip()

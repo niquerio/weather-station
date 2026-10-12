@@ -5,9 +5,9 @@ import textwrap
 
 sensor_metrics = [
     {
-        "name": "temperature_celcius",
-        "help_text": "Temperature in celcius",
-        "attribute": "temperature_celcius",
+        "name": "temperature_celsius",
+        "help_text": "Temperature in celsius",
+        "attribute": "temperature_celsius",
     },
     {
         "name": "humidity_ratio",
@@ -25,8 +25,8 @@ sensor_metrics = [
         "attribute": "timestamp_seconds",
     },
     {
-        "name": "dewpoint_celcius",
-        "help_text": "Dewpoint of relative humidity and temperature in degrees celcius",
+        "name": "dewpoint_celsius",
+        "help_text": "Dewpoint of relative humidity and temperature in degrees celsius",
         "attribute": "dewpoint",
     },
 ]
