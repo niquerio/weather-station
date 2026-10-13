@@ -178,3 +178,6 @@ setInterval(setForecast, (1000 * 60 * 60))
 document.getElementById("locale").addEventListener("click", function (e) {
   toggle_locale()
 });
+document.getElementById("refresh").addEventListener("click", function (e) {
+  window.location.reload();
+});

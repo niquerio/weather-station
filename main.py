@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -36,7 +36,8 @@ templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/", response_class=HTMLResponse)
-def main(request: Request):
+def main(request: Request, response: Response):
+    response.headers["Cache-Control"] = "no-store"
     return templates.TemplateResponse(request=request, name="index.html", context={})
 
 
