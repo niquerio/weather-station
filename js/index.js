@@ -1,5 +1,6 @@
 import { weatherIcon, weather_text } from "./tomorrow_io.js"
 import { get_sensor_data } from "./temperature_humidity_sensor"
+import { french_dictionary } from "./dictionary.js"
 
 //next steps: separate redraw from fetch data. 
 // save sensor_data and forecast_data
@@ -36,7 +37,7 @@ async function fetchForecast(){
 
 async function toggle_locale(){
   state = state == "us" ? "ca" : "us";
-  set_locale_image()
+  set_locale_image_and_title()
   setDateTime()
   drawSensorData()
   drawForecast()
@@ -44,11 +45,14 @@ async function toggle_locale(){
 
 
 function format_long_date(date_string){
-  new Date(date_string).toLocaleTimeString(current_state().locale, {month: "short", day: "numeric", year: "numeric", hour: "numeric",  minute: "numeric"})
+  let options = {month: "short", day: "numeric", year: "numeric", hour: "numeric",  minute: "numeric"}
+  return new Date(date_string).toLocaleString(current_state().locale, options)
 }
 
-function set_locale_image(){
+function set_locale_image_and_title(){
   document.getElementById("locale").src=current_state().image;
+  document.getElementById("now-title").innerHTML = to_display_text("Now")
+  document.getElementById("forecast-title").innerHTML = to_display_text("Forecast")
 }
 
 
@@ -57,11 +61,11 @@ function drawSensorData(){
     const temperature = sensor_data[sensor_location].temperature / 10
     const humidity = sensor_data[sensor_location].humidity
     const dewpoint = sensor_data[sensor_location].dewpoint
-    const time = formatter.format(sensor_data[sensor_location].time)
+    const time = sensor_data[sensor_location].time
     document.getElementById(`${sensor_location}-temperature`).innerHTML = to_display_temperature(temperature)
     document.getElementById(`${sensor_location}-humidity`).innerHTML = humidity.toFixed(0)
     document.getElementById(`${sensor_location}-dewpoint`).innerHTML = to_display_temperature(dewpoint)
-    document.getElementById(`${sensor_location}-tip`).innerHTML = `Last update: ${time}`
+    document.getElementById(`${sensor_location}-tip`).innerHTML = `${to_display_text("Last update")}: ${format_long_date(time)}`
   }
 }
 
@@ -75,7 +79,6 @@ function to_fahrenheit_fixed(celsius) {
 }
 
 function to_display_temperature(celcius){
-  console.log(current_state().unit)
   if(current_state().unit == "f"){
     return to_fahrenheit_fixed(celcius)
   }
@@ -84,11 +87,19 @@ function to_display_temperature(celcius){
   }
 }
 
+function to_display_text(text){
+  if(current_state().locale =="fr-CA"){
+    return french_dictionary[text]
+  }else{
+    return text
+  }
+}
+
 function drawForecast(){
   const hour = new Date().toLocaleTimeString(current_state().locale, { hour12: false, hour: "numeric" });
   const icon_text = weatherIcon(forecast.today.weather_code, parseInt(hour));
-  const tooltip_text = weather_text(forecast.today.weather_code)
-  const forecast_tooltip_text = `Last update: ${format_long_date(forecast.date)}`
+  const tooltip_text = to_display_text(weather_text(forecast.today.weather_code))
+  const forecast_tooltip_text = `${to_display_text("Last update")}: ${format_long_date(forecast.date)}`
   document.getElementById("today-icon").innerHTML = icon_text;
   document.getElementById("weather-tip").innerHTML = tooltip_text;
   document.getElementById("forecast-tip").innerHTML = forecast_tooltip_text;
@@ -120,7 +131,7 @@ function drawForecast(){
 
 
     const icon_text = document.createTextNode(weatherIcon(t.weather_code, t.hour));
-    const tooltip_text = document.createTextNode(weather_text(t.weather_code))
+    const tooltip_text = document.createTextNode(to_display_text(weather_text(t.weather_code)))
     const temp_text = document.createTextNode(to_display_temperature(t.temperature) + "°");
     const hour_text = document.createTextNode(t.time);
 
