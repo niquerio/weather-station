@@ -16,6 +16,8 @@ from app.forecast import Forecast
 from app.sensors import Sensors
 from app.metrics import all_metrics
 
+from app.services import S
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
@@ -38,7 +40,9 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/", response_class=HTMLResponse)
 def main(request: Request, response: Response):
     response.headers["Cache-Control"] = "no-store"
-    return templates.TemplateResponse(request=request, name="index.html", context={})
+    return templates.TemplateResponse(
+        request=request, name="index.html", context={"image_size": S.image_size}
+    )
 
 
 @app.get("/sensors")
