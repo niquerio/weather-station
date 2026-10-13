@@ -78,12 +78,12 @@ function to_fahrenheit_fixed(celsius) {
   return ((celsius * 9 / 5) + 32).toFixed(0);
 }
 
-function to_display_temperature(celcius){
+function to_display_temperature(celsius){
   if(current_state().unit == "f"){
-    return to_fahrenheit_fixed(celcius)
+    return to_fahrenheit_fixed(celsius)
   }
   else{
-    return celcius.toFixed(0)
+    return celsius.toFixed(0)
   }
 }
 
