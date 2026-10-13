@@ -1,45 +1,103 @@
 import { weatherIcon, weather_text } from "./tomorrow_io.js"
 import { get_sensor_data } from "./temperature_humidity_sensor"
 
-const formatter = new Intl.DateTimeFormat("en-US", {month: "short", day: "numeric", year: "numeric", hour: "numeric",  minute: "numeric"})
+//next steps: separate redraw from fetch data. 
+// save sensor_data and forecast_data
+const formatter = new Intl.DateTimeFormat
+const states = {"us": {
+    "unit": "f",
+    "image": "/static/middle.png",
+    "locale": "en-US"
+  },
+  "ca": {
+    "unit": "c",
+    "image": "/static/ealdormere.png",
+    "locale": "fr-CA"
+  }
+}
+var state = "us"
+var sensor_data = {}
+var forecast = {}
 
-async function setSensorReadings() {
-  const sensor_data = await get_sensor_data();
+
+
+function current_state(){
+  return states[state]
+}
+
+async function fetchSensorData(){
+  sensor_data = await get_sensor_data();
+}
+
+async function fetchForecast(){
+  const response = await fetch("/forecast");
+  forecast = await response.json();
+}
+
+async function toggle_locale(){
+  state = state == "us" ? "ca" : "us";
+  set_locale_image()
+  setDateTime()
+  drawSensorData()
+  drawForecast()
+}
+
+
+function format_long_date(date_string){
+  new Date(date_string).toLocaleTimeString(current_state().locale, {month: "short", day: "numeric", year: "numeric", hour: "numeric",  minute: "numeric"})
+}
+
+function set_locale_image(){
+  document.getElementById("locale").src=current_state().image;
+}
+
+
+function drawSensorData(){
   for(const sensor_location of ["inside", "outside"]){
     const temperature = sensor_data[sensor_location].temperature / 10
     const humidity = sensor_data[sensor_location].humidity
     const dewpoint = sensor_data[sensor_location].dewpoint
     const time = formatter.format(sensor_data[sensor_location].time)
-    document.getElementById(`${sensor_location}-temperature`).innerHTML = to_fahrenheit_fixed(temperature)
+    document.getElementById(`${sensor_location}-temperature`).innerHTML = to_display_temperature(temperature)
     document.getElementById(`${sensor_location}-humidity`).innerHTML = humidity.toFixed(0)
-    document.getElementById(`${sensor_location}-dewpoint`).innerHTML = to_fahrenheit_fixed(dewpoint)
+    document.getElementById(`${sensor_location}-dewpoint`).innerHTML = to_display_temperature(dewpoint)
     document.getElementById(`${sensor_location}-tip`).innerHTML = `Last update: ${time}`
   }
+}
+
+async function setSensorReadings() {
+  await fetchSensorData()
+  drawSensorData()
 }
 
 function to_fahrenheit_fixed(celsius) {
   return ((celsius * 9 / 5) + 32).toFixed(0);
 }
 
-function fahrenheit_forecast(forecast) {
-  forecast.today.high = to_fahrenheit_fixed(forecast.today.high)
-  forecast.today.low = to_fahrenheit_fixed(forecast.today.low)
+function to_display_temperature(celcius){
+  console.log(current_state().unit)
+  if(current_state().unit == "f"){
+    return to_fahrenheit_fixed(celcius)
+  }
+  else{
+    return celcius.toFixed(0)
+  }
 }
 
-async function setForecast() {
-  const response = await fetch("/forecast");
-  let forecast = await response.json();
-  const hour = new Date().toLocaleTimeString("en-US", { hour12: false, hour: "numeric" });
-  fahrenheit_forecast(forecast);
+function drawForecast(){
+  const hour = new Date().toLocaleTimeString(current_state().locale, { hour12: false, hour: "numeric" });
   const icon_text = weatherIcon(forecast.today.weather_code, parseInt(hour));
   const tooltip_text = weather_text(forecast.today.weather_code)
-  const forecast_tooltip_text = `Last update: ${formatter.format(new Date(forecast.date))}`
+  const forecast_tooltip_text = `Last update: ${format_long_date(forecast.date)}`
   document.getElementById("today-icon").innerHTML = icon_text;
   document.getElementById("weather-tip").innerHTML = tooltip_text;
   document.getElementById("forecast-tip").innerHTML = forecast_tooltip_text;
-  ["high", "low", "humidity", "precipitation"].forEach((kind) => {
-    document.getElementById(kind).innerHTML = parseFloat(forecast.today[kind]).toFixed(0);
-  });
+  for( const temp_kind of ["high", "low"]){
+    document.getElementById(temp_kind).innerHTML = to_display_temperature(parseFloat(forecast.today[temp_kind]));
+  }
+  for(const vapor_type of ["humidity", "precipitation"]){
+    document.getElementById(vapor_type).innerHTML = parseFloat(forecast.today[vapor_type]).toFixed(0);
+  };
   const hours = document.getElementById("hours")
   hours.innerHTML = "";
   forecast.next_five_hours.forEach((t) => {
@@ -63,7 +121,7 @@ async function setForecast() {
 
     const icon_text = document.createTextNode(weatherIcon(t.weather_code, t.hour));
     const tooltip_text = document.createTextNode(weather_text(t.weather_code))
-    const temp_text = document.createTextNode(to_fahrenheit_fixed(t.temperature) + "°");
+    const temp_text = document.createTextNode(to_display_temperature(t.temperature) + "°");
     const hour_text = document.createTextNode(t.time);
 
     icon_span.appendChild(icon_text);
@@ -85,10 +143,15 @@ async function setForecast() {
   })
 }
 
+async function setForecast() {
+  await fetchForecast()
+  drawForecast()
+}
+
 function setDateTime() {
-  var date = new Date().toLocaleDateString('en-US', { weekday: "short", month: "short", day: "numeric" });
+  var date = new Date().toLocaleDateString(current_state().locale, { weekday: "short", month: "short", day: "numeric" });
   document.getElementById("clock-date").innerHTML = date;
-  var time = new Date().toLocaleTimeString('en-US', { hour: "numeric", minute: "numeric" });
+  var time = new Date().toLocaleTimeString(current_state().locale, { hour: "numeric", minute: "numeric" });
   document.getElementById("clock-time").innerHTML = time;
 }
 
@@ -100,3 +163,7 @@ setInterval(setSensorReadings, (1000 * 15));
 
 setForecast();
 setInterval(setForecast, (1000 * 60 * 60))
+
+document.getElementById("locale").addEventListener("click", function (e) {
+  toggle_locale()
+});
