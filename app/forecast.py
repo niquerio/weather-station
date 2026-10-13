@@ -1,10 +1,17 @@
 from dateutil import parser, tz
 from httpx import get
 from app.services import S
+import json
+
+static_forecast = ""
+with open("tests/fixtures/tomorrow_forecast.json") as f:
+    static_forecast = json.load(f)
 
 
 class Forecast:
     def fetch():
+        if S.forecast_off:
+            return Forecast(static_forecast, "2023-12-28T19:43:00Z")
         resp = get(
             "https://api.tomorrow.io/v4/weather/forecast",
             params={"location": "42.295,-83.740"},
