@@ -83,7 +83,7 @@ small{
   display: none;
   /* A small overlap means there is no gap to cross when the
      pointer moves from the trigger onto the tooltip. */
-  background-color: gray;
+  background-color: dimgray;
   padding:10px;
   border-radius:15px;
   font-size: 20px;
