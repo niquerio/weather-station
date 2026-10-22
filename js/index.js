@@ -1,4 +1,4 @@
-import { weatherIcon, weather_text } from "./tomorrow_io.js"
+import { weather_icon, weather_text } from "./tomorrow_io.js"
 import { get_sensor_data } from "./temperature_humidity_sensor"
 import { french_dictionary } from "./dictionary.js"
 
@@ -97,7 +97,7 @@ function to_display_text(text){
 
 function drawForecast(){
   const hour = new Date().toLocaleTimeString(current_state().locale, { hour12: false, hour: "numeric" });
-  const icon_text = weatherIcon(forecast.today.weather_code, parseInt(hour));
+  const icon_text = weather_icon(forecast.today.weather_code, parseInt(hour));
   const tooltip_text = to_display_text(weather_text(forecast.today.weather_code))
   const forecast_tooltip_text = `${to_display_text("Last update")}: ${format_long_date(forecast.date)}`
   document.getElementById("today-icon").innerHTML = icon_text;
