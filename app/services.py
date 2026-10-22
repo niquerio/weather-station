@@ -17,6 +17,7 @@ class Services:
     sensor_api_url: str
     tomorrow_api_key: str
     forecast_off: bool
+    sensors_off: bool
 
 
 S = Services(
@@ -25,4 +26,5 @@ S = Services(
     ),
     tomorrow_api_key=os.getenv("TOMORROW_API_KEY", "your_api_key"),
     forecast_off=get_boolean_env_var("FORECAST_OFF", False),
+    sensors_off=get_boolean_env_var("SENSORS_OFF", False),
 )
