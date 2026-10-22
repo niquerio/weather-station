@@ -92,4 +92,45 @@ export class Forecast {
 
 export function drawForecast (document, currentState, forecast, currentHour = getCurrentHour()) {
   new Forecast(document, currentState, forecast, currentHour).draw()
+  const hours = document.getElementById('hours')
+  hours.innerHTML = ''
+  forecast.next_five_hours.forEach((t) => {
+    const newDiv = document.createElement('div')
+    newDiv.classList.add('hour')
+
+    const tooltipWrapperSpan = document.createElement('span')
+    tooltipWrapperSpan.classList.add('tooltip-wrapper')
+
+    const iconSpan = document.createElement('span')
+    iconSpan.classList.add('material-symbols-outlined')
+    iconSpan.classList.add('hour-icon')
+
+    const tooltipSpan = document.createElement('span')
+    tooltipSpan.classList.add('tooltip')
+
+    const tempSpan = document.createElement('span')
+    const hourSpan = document.createElement('span')
+
+    const iconText = document.createTextNode(weatherIcon(t.weather_code, t.hour))
+    // const tooltipText = document.createTextNode(toDisplayText(weatherText(t.weather_code)))
+    //  const tempText = document.createTextNode(toDisplayTemperature(t.temperature) + '°')
+    const tooltipText = document.createTextNode('whatever')
+    const tempText = document.createTextNode('whateverelse' + '°')
+    const hourText = document.createTextNode(t.time)
+
+    iconSpan.appendChild(iconText)
+    tooltipSpan.appendChild(tooltipText)
+    tooltipWrapperSpan.append(iconSpan)
+    tooltipWrapperSpan.append(tooltipSpan)
+
+    tempSpan.appendChild(tempText)
+    hourSpan.appendChild(hourText)
+
+    newDiv.appendChild(tooltipWrapperSpan)
+    newDiv.appendChild(tempSpan)
+    newDiv.appendChild(hourSpan)
+
+    hours.innerHtml = ''
+    hours.appendChild(newDiv)
+  })
 }

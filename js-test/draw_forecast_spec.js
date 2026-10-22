@@ -62,4 +62,19 @@ describe('draw_forecast', () => {
     expect(getElementText('low')).to.equal('39')
     done()
   })
+  it('adds some hours', (done) => {
+    subject()
+    const hours = document.getElementById('hours').children
+    const firstHour = hours[0].children
+    const lastHour = hours[4].children
+    expect(firstHour[0].children[0].innerHTML).to.equal('rainy_light')
+    expect(firstHour[0].children[1].innerHTML).to.equal('whatever')
+    expect(firstHour[1].innerHTML).to.equal('whateverelse°')
+    expect(firstHour[2].innerHTML).to.equal('2PM')
+    expect(lastHour[0].children[0].innerHTML).to.equal('cloud')
+    expect(lastHour[0].children[1].innerHTML).to.equal('whatever')
+    expect(lastHour[1].innerHTML).to.equal('whateverelse°')
+    expect(lastHour[2].innerHTML).to.equal('2AM')
+    done()
+  })
 })
