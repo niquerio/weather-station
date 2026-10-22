@@ -6,10 +6,16 @@ from metpy.calc import dewpoint_from_relative_humidity
 from metpy.units import units
 import json
 
+static_sensors = ""
+with open("tests/fixtures/sensor_data.json") as f:
+    static_sensors = json.load(f)
+
 
 class Sensors:
     @classmethod
     def fetch(cls):
+        if S.sensors_off:
+            return Sensors(static_sensors)
         resp = get(S.sensor_api_url)
         return Sensors(resp.json())
 

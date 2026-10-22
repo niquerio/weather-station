@@ -1,183 +1,164 @@
-import { weatherIcon, weather_text } from "./tomorrow_io.js"
-import { get_sensor_data } from "./temperature_humidity_sensor"
-import { french_dictionary } from "./dictionary.js"
+import { weatherIcon, weatherText } from './tomorrow_io.js'
+import { getSensorData } from './temperature_humidity_sensor'
+import { frenchDictionary } from './dictionary.js'
+import { Forecast } from './draw_forecast.js'
 
-//next steps: separate redraw from fetch data. 
-// save sensor_data and forecast_data
-const formatter = new Intl.DateTimeFormat
-const states = {"us": {
-    "unit": "f",
-    "image": "/static/middle.png",
-    "locale": "en-US"
+// next steps: separate redraw from fetch data.
+// save sensorData and forecast_data
+const states = {
+  us: {
+    unit: 'f',
+    image: '/static/middle.png',
+    locale: 'en-US'
   },
-  "ca": {
-    "unit": "c",
-    "image": "/static/ealdormere.png",
-    "locale": "fr-CA"
+  ca: {
+    unit: 'c',
+    image: '/static/ealdormere.png',
+    locale: 'fr-CA'
   }
 }
-var state = "us"
-var sensor_data = {}
-var forecast = {}
+let state = 'us'
+let sensorData = {}
+let forecast = {}
 
-
-
-function current_state(){
+function currentState () {
   return states[state]
 }
 
-async function fetchSensorData(){
-  sensor_data = await get_sensor_data();
+async function fetchSensorData () {
+  sensorData = await getSensorData()
 }
 
-async function fetchForecast(){
-  const response = await fetch("/forecast");
-  forecast = await response.json();
+async function fetchForecast () {
+  const response = await fetch('/forecast')
+  forecast = await response.json()
 }
 
-async function toggle_locale(){
-  state = state == "us" ? "ca" : "us";
-  set_locale_image_and_title()
+async function toggleLocale () {
+  state = state === 'us' ? 'ca' : 'us'
+  setLocaleImageAndTitle()
   setDateTime()
   drawSensorData()
   drawForecast()
 }
 
-
-function format_long_date(date_string){
-  let options = {month: "short", day: "numeric", year: "numeric", hour: "numeric",  minute: "numeric"}
-  return new Date(date_string).toLocaleString(current_state().locale, options)
+function formatLongDate (dateString) {
+  const options = { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' }
+  return new Date(dateString).toLocaleString(currentState().locale, options)
 }
 
-function set_locale_image_and_title(){
-  document.getElementById("locale").src=current_state().image;
-  document.getElementById("now-title").innerHTML = to_display_text("Now")
-  document.getElementById("forecast-title").innerHTML = to_display_text("Forecast")
+function setLocaleImageAndTitle () {
+  document.getElementById('locale').src = currentState().image
+  document.getElementById('now-title').innerHTML = toDisplayText('Now')
+  document.getElementById('forecast-title').innerHTML = toDisplayText('Forecast')
 }
 
-
-function drawSensorData(){
-  for(const sensor_location of ["inside", "outside"]){
-    const temperature = sensor_data[sensor_location].temperature / 10
-    const humidity = sensor_data[sensor_location].humidity
-    const dewpoint = sensor_data[sensor_location].dewpoint
-    const time = sensor_data[sensor_location].time
-    document.getElementById(`${sensor_location}-temperature`).innerHTML = to_display_temperature(temperature)
-    document.getElementById(`${sensor_location}-humidity`).innerHTML = humidity.toFixed(0)
-    document.getElementById(`${sensor_location}-dewpoint`).innerHTML = to_display_temperature(dewpoint)
-    document.getElementById(`${sensor_location}-tip`).innerHTML = `${to_display_text("Last update")}: ${format_long_date(time)}`
+function drawSensorData () {
+  for (const sensorLocation of ['inside', 'outside']) {
+    const temperature = sensorData[sensorLocation].temperature / 10
+    const humidity = sensorData[sensorLocation].humidity
+    const dewpoint = sensorData[sensorLocation].dewpoint
+    const time = sensorData[sensorLocation].time
+    document.getElementById(`${sensorLocation}-temperature`).innerHTML = toDisplayTemperature(temperature)
+    document.getElementById(`${sensorLocation}-humidity`).innerHTML = humidity.toFixed(0)
+    document.getElementById(`${sensorLocation}-dewpoint`).innerHTML = toDisplayTemperature(dewpoint)
+    document.getElementById(`${sensorLocation}-tip`).innerHTML = `${toDisplayText('Last update')}: ${formatLongDate(time)}`
   }
 }
 
-async function setSensorReadings() {
+async function setSensorReadings () {
   await fetchSensorData()
   drawSensorData()
 }
 
-function to_fahrenheit_fixed(celsius) {
-  return ((celsius * 9 / 5) + 32).toFixed(0);
+function toFahrenheitFixed (celsius) {
+  return ((celsius * 9 / 5) + 32).toFixed(0)
 }
 
-function to_display_temperature(celsius){
-  if(current_state().unit == "f"){
-    return to_fahrenheit_fixed(celsius)
-  }
-  else{
+function toDisplayTemperature (celsius) {
+  if (currentState().unit === 'f') {
+    return toFahrenheitFixed(celsius)
+  } else {
     return celsius.toFixed(0)
   }
 }
 
-function to_display_text(text){
-  if(current_state().locale =="fr-CA"){
-    return french_dictionary[text]
-  }else{
+function toDisplayText (text) {
+  if (currentState().locale === 'fr-CA') {
+    return frenchDictionary[text]
+  } else {
     return text
   }
 }
 
-function drawForecast(){
-  const hour = new Date().toLocaleTimeString(current_state().locale, { hour12: false, hour: "numeric" });
-  const icon_text = weatherIcon(forecast.today.weather_code, parseInt(hour));
-  const tooltip_text = to_display_text(weather_text(forecast.today.weather_code))
-  const forecast_tooltip_text = `${to_display_text("Last update")}: ${format_long_date(forecast.date)}`
-  document.getElementById("today-icon").innerHTML = icon_text;
-  document.getElementById("weather-tip").innerHTML = tooltip_text;
-  document.getElementById("forecast-tip").innerHTML = forecast_tooltip_text;
-  for( const temp_kind of ["high", "low"]){
-    document.getElementById(temp_kind).innerHTML = to_display_temperature(parseFloat(forecast.today[temp_kind]));
-  }
-  for(const vapor_type of ["humidity", "precipitation"]){
-    document.getElementById(vapor_type).innerHTML = parseFloat(forecast.today[vapor_type]).toFixed(0);
-  };
-  const hours = document.getElementById("hours")
-  hours.innerHTML = "";
+function drawForecast () {
+  new Forecast(document, currentState(), forecast).draw()
+
+  const hours = document.getElementById('hours')
+  hours.innerHTML = ''
   forecast.next_five_hours.forEach((t) => {
-    const new_div = document.createElement("div")
-    new_div.classList.add("hour")
+    const newDiv = document.createElement('div')
+    newDiv.classList.add('hour')
 
-    const tooltip_wrapper_span = document.createElement("span")
-    tooltip_wrapper_span.classList.add("tooltip-wrapper")
+    const tooltipWrapperSpan = document.createElement('span')
+    tooltipWrapperSpan.classList.add('tooltip-wrapper')
 
-    const icon_span = document.createElement("span")
-    icon_span.classList.add("material-symbols-outlined")
-    icon_span.classList.add("hour-icon")
+    const iconSpan = document.createElement('span')
+    iconSpan.classList.add('material-symbols-outlined')
+    iconSpan.classList.add('hour-icon')
 
-    const tooltip_span = document.createElement("span")
-    tooltip_span.classList.add("tooltip")
+    const tooltipSpan = document.createElement('span')
+    tooltipSpan.classList.add('tooltip')
 
-    const temp_span = document.createElement("span")
-    const hour_span = document.createElement("span")
+    const tempSpan = document.createElement('span')
+    const hourSpan = document.createElement('span')
 
+    const iconText = document.createTextNode(weatherIcon(t.weather_code, t.hour))
+    const tooltipText = document.createTextNode(toDisplayText(weatherText(t.weather_code)))
+    const tempText = document.createTextNode(toDisplayTemperature(t.temperature) + '°')
+    const hourText = document.createTextNode(t.time)
 
+    iconSpan.appendChild(iconText)
+    tooltipSpan.appendChild(tooltipText)
+    tooltipWrapperSpan.append(iconSpan)
+    tooltipWrapperSpan.append(tooltipSpan)
 
-    const icon_text = document.createTextNode(weatherIcon(t.weather_code, t.hour));
-    const tooltip_text = document.createTextNode(to_display_text(weather_text(t.weather_code)))
-    const temp_text = document.createTextNode(to_display_temperature(t.temperature) + "°");
-    const hour_text = document.createTextNode(t.time);
+    tempSpan.appendChild(tempText)
+    hourSpan.appendChild(hourText)
 
-    icon_span.appendChild(icon_text);
-    tooltip_span.appendChild(tooltip_text);
-    tooltip_wrapper_span.append(icon_span);
-    tooltip_wrapper_span.append(tooltip_span);
+    newDiv.appendChild(tooltipWrapperSpan)
+    newDiv.appendChild(tempSpan)
+    newDiv.appendChild(hourSpan)
 
-
-    temp_span.appendChild(temp_text);
-    hour_span.appendChild(hour_text);
-
-    new_div.appendChild(tooltip_wrapper_span);
-    new_div.appendChild(temp_span);
-    new_div.appendChild(hour_span);
-
-    hours.innerHtml = ""
-    hours.appendChild(new_div);
-
+    hours.innerHtml = ''
+    hours.appendChild(newDiv)
   })
 }
 
-async function setForecast() {
+async function setForecast () {
   await fetchForecast()
   drawForecast()
 }
 
-function setDateTime() {
-  var date = new Date().toLocaleDateString(current_state().locale, { weekday: "short", month: "short", day: "numeric" });
-  document.getElementById("clock-date").innerHTML = date;
-  var time = new Date().toLocaleTimeString(current_state().locale, { hour: "numeric", minute: "numeric" });
-  document.getElementById("clock-time").innerHTML = time;
+function setDateTime () {
+  const date = new Date().toLocaleDateString(currentState().locale, { weekday: 'short', month: 'short', day: 'numeric' })
+  document.getElementById('clock-date').innerHTML = date
+  const time = new Date().toLocaleTimeString(currentState().locale, { hour: 'numeric', minute: 'numeric' })
+  document.getElementById('clock-time').innerHTML = time
 }
 
-setDateTime();
+setDateTime()
 setInterval(setDateTime, 1000)
 
-setSensorReadings();
-setInterval(setSensorReadings, (1000 * 15));
+setSensorReadings()
+setInterval(setSensorReadings, (1000 * 15))
 
-setForecast();
+setForecast()
 setInterval(setForecast, (1000 * 60 * 60))
 
-document.getElementById("locale").addEventListener("click", function (e) {
-  toggle_locale()
-});
-document.getElementById("refresh").addEventListener("click", function (e) {
-  window.location.reload();
-});
+document.getElementById('locale').addEventListener('click', function (e) {
+  toggleLocale()
+})
+document.getElementById('refresh').addEventListener('click', function (e) {
+  window.location.reload()
+})

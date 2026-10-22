@@ -1,56 +1,58 @@
 export class TemperatureHumiditySensor {
-    constructor(data) {
-        this.data = data
-    }
+  constructor (data) {
+    this.data = data
+  }
 
-    data() {
-        return this.data
-    }
+  data () {
+    return this.data
+  }
 
-    get inside() {
-        const inside_data = this.data.find(r => r.name == "Music room")
-        return inside_data ? new Location(inside_data) : new EmptyLocation()
-    }
+  get inside () {
+    const insideData = this.data.find(r => r.name === 'Music room')
+    return insideData ? new Location(insideData) : new EmptyLocation()
+  }
 
-    get outside() {
-        const outside_data = this.data.find(r => r.name == "Front porch")
-        return outside_data ? new Location(outside_data) : new EmptyLocation()
-    }
+  get outside () {
+    const outsideData = this.data.find(r => r.name === 'Front porch')
+    return outsideData ? new Location(outsideData) : new EmptyLocation()
+  }
 }
 
 export class Location {
-    constructor(data) {
-        this.data = data
-    }
+  constructor (data) {
+    this.data = data
+  }
 
-    get name() {
-        return this.data["name"]
-    }
+  get name () {
+    return this.data.name
+  }
 
-    get humidity() {
-        return this.data["humidity"]
-    }
+  get humidity () {
+    return this.data.humidity
+  }
 
-    get temperature() {
-        return this.data["temperature"]
-    }
-    get dewpoint() {
-      return this.data["dewpoint"]
-    }
-    get time() {
-        return new Date(this.data["time"])
-    }
+  get temperature () {
+    return this.data.temperature
+  }
+
+  get dewpoint () {
+    return this.data.dewpoint
+  }
+
+  get time () {
+    return new Date(this.data.time)
+  }
 }
 
 export class EmptyLocation {
-    get name() { return "" }
-    get humidity() { return "" }
-    get temperature() { return "" }
-    get time() { return "" }
+  get name () { return '' }
+  get humidity () { return '' }
+  get temperature () { return '' }
+  get time () { return '' }
 }
 
-export async function get_sensor_data() {
-    const response = await fetch("/sensors")
-    let sensor_data = await response.json();
-    return new TemperatureHumiditySensor(sensor_data)
+export async function getSensorData () {
+  const response = await fetch('/sensors')
+  const sensorData = await response.json()
+  return new TemperatureHumiditySensor(sensorData)
 }
